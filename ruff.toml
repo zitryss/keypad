@@ -1,0 +1,35 @@
+# Pico firmware and device configuration follow MicroPython constraints rather
+# than this host-side CPython profile.
+extend-exclude = [
+    "*_CONFIG*.py",
+    "boot.py",
+    "examples",
+    "lib",
+    "main.py",
+    "webrepl_cfg.py",
+]
+
+[lint]
+# Enable all rules
+select = ["ALL"]
+
+# Keep exceptions narrow and document why each rule is disabled.
+ignore = [
+    # The formatter owns trailing commas and warns when COM812 is also enabled.
+    "COM812",
+    # Docstrings are optional for small host-side scripts.
+    "D",
+    # The formatter may retain long URLs and other lines that cannot be split safely.
+    "E501",
+    # Assigning exception messages to one-use variables obscures their raise sites.
+    "EM101",
+    "EM102",
+    # Dedicated exception classes for every CLI validation message add no value.
+    "TRY003",
+    # Expected CLI failures should not emit internal tracebacks.
+    "TRY400",
+]
+
+[lint.per-file-ignores]
+# Dynamic firmware doubles are clearer without exhaustive host-only annotations.
+"tests/**/*.py" = ["ANN", "C901", "FBT", "PLR2004", "S101", "S106"]
